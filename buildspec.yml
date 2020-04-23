@@ -3,6 +3,12 @@ version: 0.2
 phases:
     pre_build:
         commands:
-            - echo Pulling source...
+            - echo Emptying bucket $BUCKET_NAME
             - aws s3 rm s3://$BUCKET_NAME --recursive
-    
+    build:
+        commands:
+            - echo Pushing new code to bucket $BUCKET_NAME
+            - aws s3 cp . s3://$BUCKET_NAME --recursive --acl public-read
+    post_build:
+        commands:
+            - echo Successfully pushed code to bucket $BUCKET_NAME
